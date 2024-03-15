@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page with Animated Background</title>
+    <title>Login Page</title>
     <style>
         body, html {
             margin: 0;
@@ -21,6 +21,25 @@
             z-index: -1;
         }
 
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.7;
+            transition: opacity 1s;
+        }
+
+        .circle {
+            width: 100px;
+            height: 100px;
+            background-color: #f48fb1;
+        }
+
+        .animated-background {
+            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab, #23d5ab, #23a6d5, #e73c7e, #ee7752);
+            background-size: 600% 600%;
+            animation: gradientAnimation 15s ease infinite;
+        }
+
         @keyframes gradientAnimation {
             0% {
                 background-position: 0% 50%;
@@ -31,12 +50,6 @@
             100% {
                 background-position: 0% 50%;
             }
-        }
-
-        .animated-background {
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientAnimation 15s ease infinite;
         }
 
         .login-container {
@@ -80,7 +93,8 @@
     </style>
 </head>
 <body>
-    <div class="animated-background"></div>
+    <div class="animated-background" id="background">
+    </div>
     <div class="login-container">
         <form action="login.php" method="POST">
             <h2>Login</h2>
@@ -89,5 +103,41 @@
             <input type="submit" value="Login">
         </form>
     </div>
+    <script>
+        function createCircle() {
+            const circle = document.createElement('div');
+            circle.classList.add('shape', 'circle');
+            let x, y;
+            do {
+                x = Math.random() * 100;
+                y = Math.random() * 100;
+                // Check if the new circle overlaps with existing circles
+                var overlap = false;
+                for (var i = 0; i < document.getElementsByClassName("circle").length; i++) {
+                    const existingCircle = document.getElementsByClassName("circle")[i];
+                    const existingX = parseFloat(existingCircle.style.left);
+                    const existingY = parseFloat(existingCircle.style.top);
+                    const distance = Math.sqrt(Math.pow(x - existingX, 2) + Math.pow(y - existingY, 2));
+                    if (distance < 15) { // Adjust the minimum distance between circles as needed
+                        overlap = true;
+                        break;
+                    }
+                }
+            } while (overlap); // Repeat until the circle doesn't overlap with existing circles
+            circle.style.top = `${y}%`;
+            circle.style.left = `${x}%`;
+            document.getElementById('background').appendChild(circle);
+            setTimeout(() => {
+                circle.style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('background').removeChild(circle);
+                }, 1000);
+            }, Math.random() * 5000 + 2000); // Random delay between 2 to 7 seconds
+        }
+
+        setInterval(() => {
+            createCircle();
+        }, 1000); // Create a circle every second
+    </script>
 </body>
 </html>
