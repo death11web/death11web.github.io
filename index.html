@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Login Page with Animated Background</title>
     <style>
         body, html {
             margin: 0;
@@ -96,10 +96,10 @@
     <div class="animated-background" id="background">
     </div>
     <div class="login-container">
-        <form action="login.php" method="POST">
+        <form id="loginForm" action="login.php" method="POST">
             <h2>Login</h2>
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="123" placeholder="Username" required>
+            <input type="password" name="123" placeholder="Password" required>
             <input type="submit" value="Login">
         </form>
     </div>
@@ -111,19 +111,18 @@
             do {
                 x = Math.random() * 100;
                 y = Math.random() * 100;
-                // Check if the new circle overlaps with existing circles
                 var overlap = false;
                 for (var i = 0; i < document.getElementsByClassName("circle").length; i++) {
                     const existingCircle = document.getElementsByClassName("circle")[i];
                     const existingX = parseFloat(existingCircle.style.left);
                     const existingY = parseFloat(existingCircle.style.top);
                     const distance = Math.sqrt(Math.pow(x - existingX, 2) + Math.pow(y - existingY, 2));
-                    if (distance < 15) { // Adjust the minimum distance between circles as needed
+                    if (distance < 15) {
                         overlap = true;
                         break;
                     }
                 }
-            } while (overlap); // Repeat until the circle doesn't overlap with existing circles
+            } while (overlap);
             circle.style.top = `${y}%`;
             circle.style.left = `${x}%`;
             document.getElementById('background').appendChild(circle);
@@ -132,12 +131,21 @@
                 setTimeout(() => {
                     document.getElementById('background').removeChild(circle);
                 }, 1000);
-            }, Math.random() * 5000 + 2000); // Random delay between 2 to 7 seconds
+            }, Math.random() * 5000 + 2000);
         }
 
         setInterval(() => {
             createCircle();
-        }, 1000); // Create a circle every second
+        }, 1000);
+
+        // Add event listener for form submission
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            // Prevent default form submission
+            event.preventDefault();
+            
+            // Redirect to the second page after form submission
+            window.location.href = "second_page.html";
+        });
     </script>
 </body>
 </html>
